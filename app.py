@@ -9,19 +9,16 @@ import asyncio
 import nest_asyncio
 from datetime import datetime
 
-# Configure logging
+
 logging.basicConfig(level=logging.INFO)
 
-# Initialize Dash app
+
 app = dash.Dash(__name__)
 app.title = "F1 Telemetry Dashboard - Enhanced"
 
-# Apply nest_asyncio
+
 nest_asyncio.apply()
 
-# ========================
-#      APP LAYOUT
-# ========================
 app.layout = html.Div([
     html.H1("Live F1 Telemetry Comparison", style={'textAlign': 'center'}),
     dcc.Interval(id="live-update", interval=15*1000, n_intervals=0),  # Reduced refresh rate
@@ -37,14 +34,12 @@ app.layout = html.Div([
     ], style={'padding': '10px'})
 ])
 
-# ========================
-#    DATA PROCESSING
-# ========================
+
 async def fetch_car_data():
     try:
         # Hardcoded values for testing
         session_key = 9158
-        drivers = [1, 11]
+        drivers = [1, 3]
         
         async with httpx.AsyncClient(timeout=30.0) as client:
             responses = await asyncio.gather(
