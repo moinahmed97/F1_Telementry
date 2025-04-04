@@ -39,7 +39,7 @@ async def fetch_car_data():
     try:
         # Hardcoded values for testing
         session_key = 9158
-        drivers = [1, 3]
+        drivers = [1, 11]
         
         async with httpx.AsyncClient(timeout=30.0) as client:
             responses = await asyncio.gather(
