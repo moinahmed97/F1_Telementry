@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Real-time F1 driver telemetry comparison dashboard using OpenF1 API, Python, and Dash. Visualize throttle, brake, speed, and gear data for two drivers during live sessions.
+A Real-time F1 driver telemetry comparison dashboard using OpenF1 API, Python, and Dash. Visualize throttle, brake, speed, and gear data for two drivers during live sessions.
 
 ![Dashboard Screenshot](https://via.placeholder.com/800x400.png?text=F1+Telemetry+Dashboard+Preview)
 
