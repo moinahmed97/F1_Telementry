@@ -82,7 +82,7 @@ http://localhost:8050
    ```
 5. Open a Pull Request
 
-**Note**: Requires Python 3.10+ and valid OpenF1 session keys.
+**Note**: Requires Python 3.10+ and valid OpenF1 session keys found at https://openf1.org.
 
 ## 📝 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
