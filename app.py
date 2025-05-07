@@ -1,4 +1,4 @@
-# app.py (Improved Visualization)
+
 import dash
 from dash import dcc, html, Input, Output
 import plotly.graph_objs as go
@@ -21,7 +21,7 @@ nest_asyncio.apply()
 
 app.layout = html.Div([
     html.H1("Live F1 Telemetry Comparison", style={'textAlign': 'center'}),
-    dcc.Interval(id="live-update", interval=15*1000, n_intervals=0),  # Reduced refresh rate
+    dcc.Interval(id="live-update", interval=15*1000, n_intervals=0),  
     
     html.Div([
         dcc.Graph(id="throttle-graph", style={'height': '400px', 'width': '49%', 'display': 'inline-block'}),
@@ -54,10 +54,10 @@ async def fetch_car_data():
                 if response.status_code == 200:
                     df = pd.DataFrame(response.json())
                     if not df.empty:
-                        # Convert and smooth data
+                  
                         df["date"] = pd.to_datetime(df["date"])
                         for col in ['throttle', 'brake', 'speed']:
-                            df[col] = df[col].rolling(window=15, min_periods=1).mean()  # Increased smoothing
+                            df[col] = df[col].rolling(window=15, min_periods=1).mean() 
                         dfs.append(df)
             
             if len(dfs) < 2:
@@ -70,12 +70,10 @@ async def fetch_car_data():
         logging.error(f"Data error: {str(e)}")
         return pd.DataFrame()
 
-# ========================
-#    VISUALIZATION STYLING
-# ========================
+
 def create_styled_figure(df, metric, drivers):
-    # Color scheme
-    colors = ['#636EFA', '#EF553B']  # Plotly's default blue and red
+
+    colors = ['#636EFA', '#EF553B']  
     
     return {
         'data': [
@@ -113,9 +111,6 @@ def create_styled_figure(df, metric, drivers):
         )
     }
 
-# ========================
-#      CALLBACKS
-# ========================
 def sync_fetch_car_data():
     return asyncio.run(fetch_car_data())
 
@@ -123,7 +118,7 @@ def sync_fetch_car_data():
     [Output("throttle-graph", "figure"),
      Output("brake-graph", "figure"),
      Output("speed-graph", "figure"),
-     Output("gear-graph", "figure")],  # Correct ID here
+     Output("gear-graph", "figure")], 
     [Input("live-update", "n_intervals")]
 )
 def update_graphs(n):
