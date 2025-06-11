@@ -3,7 +3,7 @@
 A full-stack web application designed for Formula 1 enthusiasts and data analysts. This dashboard provides a platform to visually compare the granular telemetry data between any two drivers from a selected race session, moving beyond simple results to uncover the details of driver performance.
 
 The application fetches live data using the FastF1 library, processes it with a robust Flask and Pandas backend, and renders fully interactive visualizations on a dynamic frontend using Plotly.js.
-![F1 Telemetry Dashboard Screenshot](images/telemetry dashboard.jpg)
+<img src="images/telemetry dashboard.PNG" alt="F1 Telemetry Dashboard Screenshot" width="600"/>
 ## Table of Contents
 - [Key Features](#key-features)
 - [Project Architecture](#project-architecture)
