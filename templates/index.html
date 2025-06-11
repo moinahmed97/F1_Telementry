@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Telemetry Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>F1 Telemetry Comparison Dashboard</h1>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="session-select">Select Session:</label>
+                <select id="session-select"></select>
+            </div>
+            <div class="control-group">
+                <label for="driver-select">Select Drivers (Max 2):</label>
+                <select id="driver-select" multiple></select>
+            </div>
+            <button id="update-graphs-button">Update Graphs</button>
+        </div>
+
+        <div class="graphs-container">
+            <div id="throttle-graph" class="graph-box"></div>
+            <div id="brake-graph" class="graph-box"></div>
+            <div id="speed-graph" class="graph-box"></div>
+            <div id="gear-graph" class="graph-box"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
