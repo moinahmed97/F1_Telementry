@@ -5,27 +5,17 @@ import fastf1
 import logging
 from datetime import datetime
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Set cache directory for FastF1
-fastf1.Cache.enable_cache('cache') 
+fastf1.Cache.enable_cache('cache')
 
-# --- Flask App Initialization ---
 app = Flask(__name__)
 
-# --- Global Variables ---
 DEFAULT_SMOOTHING_WINDOW = 15
-# In-memory cache to store fetched session data to avoid re-downloading
 _cached_telemetry_data = {}
 
-# --- Data Fetching Function ---
 def fetch_session_data(session_key):
-    """
-    Fetches and processes telemetry data for a given session.
-    Results are cached in memory to speed up subsequent requests.
-    """
     if session_key in _cached_telemetry_data:
         logger.info(f"Using cached telemetry data for session: {session_key}")
         return _cached_telemetry_data[session_key]
@@ -49,7 +39,6 @@ def fetch_session_data(session_key):
                 if not laps_driver.empty:
                     telemetry_data = laps_driver.get_car_data().add_distance()
                     if not telemetry_data.empty:
-                        # Standardize column names to lowercase to handle inconsistencies
                         telemetry_data.columns = [col.lower() for col in telemetry_data.columns]
                         
                         telemetry_data['date_ms'] = (telemetry_data['date'].astype('int64') // 10**6)
@@ -60,7 +49,6 @@ def fetch_session_data(session_key):
             logger.warning(f"No telemetry data found for session: {session_key}")
             return pd.DataFrame(), {}, []
 
-        # Check for available telemetry channels before processing
         metrics_to_smooth = ["throttle", "brake", "speed"]
         available_metrics = [metric for metric in metrics_to_smooth if metric in all_telemetry.columns]
         logger.info(f"Found available telemetry channels to smooth: {available_metrics}")
@@ -70,7 +58,6 @@ def fetch_session_data(session_key):
                 window=DEFAULT_SMOOTHING_WINDOW, min_periods=1, center=True
             ).mean().reset_index(level=0, drop=True)
         
-        # Look for 'ngear' (lowercase, no underscore) and rename for consistency
         if 'ngear' in all_telemetry.columns:
             all_telemetry.rename(columns={'ngear': 'n_gear'}, inplace=True)
             all_telemetry['n_gear'] = all_telemetry['n_gear'].astype(str)
@@ -84,16 +71,12 @@ def fetch_session_data(session_key):
         traceback.print_exc()
         return pd.DataFrame(), {}, []
 
-# --- Flask Routes ---
-
 @app.route('/')
 def index():
-    """Serves the main HTML page."""
     return render_template('index.html')
 
 @app.route('/api/sessions')
 def get_sessions():
-    """Returns a dynamic list of available F1 sessions from 2019 to the present."""
     sessions = []
     current_year = datetime.now().year
     
@@ -121,16 +104,15 @@ def get_sessions():
 
     return jsonify(sessions)
 
+
 @app.route('/api/drivers/<session_key>')
 def get_drivers(session_key):
-    """Returns a list of drivers for a given session, sorted alphabetically."""
     _, driver_mapping, _ = fetch_session_data(session_key)
     driver_options = [{'label': f"{name} ({num})", 'value': num} for num, name in driver_mapping.items()]
     return jsonify(sorted(driver_options, key=lambda x: x['label']))
 
 @app.route('/api/telemetry')
 def get_telemetry_data():
-    """Returns filtered telemetry data for selected drivers and session."""
     session_key = request.args.get('session')
     selected_drivers_str = request.args.get('drivers')
 
@@ -153,7 +135,6 @@ def get_telemetry_data():
 
     filtered_df = all_telemetry[all_telemetry['driver_number'].isin(selected_drivers_nums)]
     
-    # Dynamically select available columns for the final output
     base_cols = ['date_ms', 'driver_number']
     telemetry_cols = ['throttle', 'brake', 'speed', 'n_gear']
     available_cols = [col for col in telemetry_cols if col in filtered_df.columns]
